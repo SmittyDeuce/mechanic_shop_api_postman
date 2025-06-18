@@ -4,9 +4,11 @@ from marshmallow import ValidationError
 from sqlalchemy import select
 from application.models import db, Customer
 from . import customers_bp
+from application.extensions import limiter
 
 
 @customers_bp.route("/", methods=["POST"])
+@limiter.limit("3 per hour") # A client can only attempt to mkae 3 users per hour
 def create_customer():
     try:
         customer_data = customer_schema.load(request.json)
