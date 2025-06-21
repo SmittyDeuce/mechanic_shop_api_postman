@@ -4,7 +4,7 @@ from marshmallow import ValidationError
 from sqlalchemy import select
 from application.models import db, Customer
 from . import customers_bp
-from application.extensions import limiter
+from application.extensions import limiter, cache
 
 
 @customers_bp.route("/", methods=["POST"])
@@ -22,7 +22,7 @@ def create_customer():
     
     return customer_schema.jsonify(new_customer), 201
 
-
+@cache.cached(timeout=60)
 @customers_bp.route("/", methods=["GET"])
 def get_all_customers():
     all_customers = db.session.scalars(select(Customer)).all()

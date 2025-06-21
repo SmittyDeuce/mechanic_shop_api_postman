@@ -1,6 +1,6 @@
 ## func to produce our flask apps
 from flask import Flask
-from .extensions import ma, limiter
+from .extensions import ma, limiter, cache
 from .models import db
 from .blueprints.customer import customers_bp
 from .blueprints.mechanics import mechanic_bp
@@ -15,6 +15,7 @@ def create_app(config_name):
     ma.init_app(app)
     db.init_app(app)
     limiter.init_app(app)
+    cache.init_app(app)
     
     #register blueprints
     app.register_blueprint(customers_bp, url_prefix='/customers')
